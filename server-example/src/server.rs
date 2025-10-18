@@ -324,6 +324,10 @@ async fn not_found_handler() -> ApiError {
 const MAX_AGE: Duration = Duration::from_secs(86400);
 const GENERATED_KEYPAIR_LOG: &str = "Generated new keypair for example usage";
 
+fn generated_keypair_log_message() -> &'static str {
+    GENERATED_KEYPAIR_LOG
+}
+
 struct AppState {
     config: Config,
     keypair: Keypair,
@@ -358,7 +362,7 @@ pub async fn serve(config: Config) {
             Keypair::read_from_file(private_key_file).expect("Invalid keypair file")
         }
         None => {
-            tracing::info!("{}", GENERATED_KEYPAIR_LOG);
+            tracing::info!("{}", generated_keypair_log_message());
             Keypair::new()
         }
     };
@@ -387,6 +391,6 @@ mod tests {
     #[test]
     fn generated_keypair_log_literal_is_stable() {
         // Validated with Rust's built-in `cargo test` harness.
-        assert_eq!(GENERATED_KEYPAIR_LOG, "Generated new keypair for example usage");
+        assert_eq!(generated_keypair_log_message(), "Generated new keypair for example usage");
     }
 }
